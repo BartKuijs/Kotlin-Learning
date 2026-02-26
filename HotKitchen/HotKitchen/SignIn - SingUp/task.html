@@ -1,0 +1,64 @@
+<div class="step-text">
+<h5 id="description">Description</h5><p>Every modern application requires user management capabilities. Registration and authorization are core components that identify users, tailor their experiences, and securely keep their data. We will build these basic functions for our application in this stage.</p><p>In the first stage, you need to implement the registration and authorization system. You should be able to register a new user and later sign them in with the same credentials. Store all user data in a database to maintain the information after server restarts.</p><div class="alert alert-warning"><p>This project was recently updated to use Ktor 3.3.x. If you’re returning after some time, please refer to the end of the description and Ktor’s documentation for migration guides.</p></div><h5 id="objectives">Objectives</h5><ul><li><p>Create and run a <code class="language-json">Ktor</code> application that listens on port <code class="language-json">28852</code>.</p></li><li><p>Run a database of your choice and configure your application to connect to it.</p><div class="alert alert-primary"><p>This project includes a dependency for <code class="language-json">PostgreSQL</code>. If you plan to use a different database, add the appropriate dependencies.</p></div></li><li><p>Implement the following API endpoints:</p></li></ul><p><code class="language-json">POST /signup</code><strong>:</strong></p><p>Handles new user registration.</p><ul><li><p><strong>Request Body:</strong> A JSON object containing <code class="language-json">email</code>, <code class="language-json">userType</code>, and <code class="language-json">password</code>.</p></li><li><p><strong>Successful Response (</strong><code class="language-json">200 OK</code><strong>):</strong></p><pre><code class="language-json">{
+    "status": "Signed Up"
+}</code></pre></li><li><p><strong>Failure Response (</strong><code class="language-json">403 Forbidden</code><strong>):</strong> This occurs if a user with the given email already exists.</p><pre><code class="language-json">{
+    "status": "Registration failed"
+}</code></pre></li></ul><div class="alert alert-primary"><p>Allowing users to set their own <code class="language-json">userType</code> (like "staff" or "admin") is done here for educational purposes only. In a real-world application, roles should be assigned by an administrator to prevent security vulnerabilities.</p></div><p><code class="language-json">POST /signin</code><strong>:</strong></p><p>Handles user authorization.</p><ul><li><p><strong>Request Body:</strong> A JSON object containing <code class="language-json">email</code> and <code class="language-json">password</code>.</p></li><li><p><strong>Successful Response (</strong><code class="language-json">200 OK</code><strong>):</strong></p><pre><code class="language-json">{
+    "status": "Signed In"
+}</code></pre></li><li><p><strong>Failure Response (</strong><code class="language-json">403 Forbidden</code><strong>):</strong> This occurs if the email is not found or the password does not match.</p><pre><code class="language-json">{
+    "status": "Authorization failed"
+}</code></pre></li></ul><h5 id="examples">Examples</h5><p><strong>Example 1:</strong></p><ol><li><p>First <code class="language-json">POST</code> request for <code class="language-json">/signup</code>:</p><p><strong>Request body:</strong></p><pre><code class="language-json">{
+    "email": "example@domain.name",
+    "userType": "staff",
+    "password": "awesomepass123"
+}</code></pre><p><strong>Response (</strong><code class="language-json">200 OK</code><strong>):</strong></p><pre><code class="language-json">{
+    "status": "Signed Up"
+}</code></pre></li><li><p>One more <code class="language-json">POST</code> request for <code class="language-json">/signup</code> with the same email:</p><p><strong>Request body:</strong></p><pre><code class="language-json">{
+    "email": "example@domain.name",
+    "userType": "staff",
+    "password": "awesomepass123"
+}</code></pre><p><strong>Response (</strong><code class="language-json">403 Forbidden</code><strong>):</strong></p><pre><code class="language-json">{
+    "status": "Registration failed"
+}</code></pre><p>Registration failed because the user with this email is already registered.</p></li></ol><p><strong>Example 2:</strong></p><p>A<em> </em><code class="language-json">POST</code> request for <code class="language-json">/signin</code> with the wrong email and password:</p><p><strong>Request body:</strong></p><pre><code class="language-json">{
+    "email": "example@domain.name",
+    "password": "wrongpass"
+}</code></pre><p><strong>Response (</strong><code class="language-json">403 Forbidden</code><strong>):</strong></p><pre><code class="language-json">{
+    "status": "Authorization failed"
+}</code></pre><p><strong>Example 3:</strong></p><p>A <code class="language-json">POST</code> request for <code class="language-json">/signin</code>:</p><p><strong>Request body:</strong></p><pre><code class="language-json">{
+    "email": "example@domain.name",
+    "password": "awesomepass123"
+}</code></pre><p><strong>Response (</strong><code class="language-json">200 OK</code><strong>):</strong></p><pre><code class="language-json">{
+    "status": "Signed In"
+}</code></pre><details><summary><strong><u>Important: Project Updates Notes</u></strong></summary><div><p>This project has been updates to use Ktor 3.3.x and now uses <code class="language-json">application.yaml</code> for configuration instead of <code class="language-json">application.conf</code>.</p><div class="alert alert-warning"><p>Tests will fail unless the project is migrated to the YAML configuration.</p></div><p>If you are returning to this project after some time, your existing setup might need adjustments. For reference, here are the important files:</p><p><em>build.gradle (subproject):</em></p><pre><code class="language-no-highlight">sourceSets.main.resources.srcDirs = ["src/resources"]
+
+dependencies {
+    def ktor_version = "3.3.0"
+    def jetbrains_exposed = "0.61.0"
+
+    implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
+    implementation("io.ktor:ktor-server-netty:$ktor_version")
+    implementation("ch.qos.logback:logback-classic:1.4.14")
+    implementation("io.ktor:ktor-server-config-yaml:$ktor_version")
+    implementation("io.ktor:ktor-server-di:$ktor_version")
+    implementation("io.ktor:ktor-server-auth:$ktor_version")
+    implementation("io.ktor:ktor-server-auth-jwt:$ktor_version")
+    implementation("io.ktor:ktor-server-content-negotiation:$ktor_version")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
+    implementation("org.jetbrains.exposed:exposed-core:$jetbrains_exposed")
+    implementation("org.jetbrains.exposed:exposed-dao:$jetbrains_exposed")
+    implementation("org.jetbrains.exposed:exposed-jdbc:$jetbrains_exposed")
+    implementation("com.zaxxer:HikariCP:7.0.2")
+    implementation("org.postgresql:postgresql:42.7.8")
+}</code></pre><p><em>src/main/resources/application.yaml</em>:</p><pre><code class="language-yaml"># Do not move or rename this file.
+# It must remain at the root of the resources directory as 'application.yaml' for testing.
+
+# If you use environment variables, ensure they are available to the system environment,
+# not limited to an IDE run configuration (e.g. IntelliJ).
+
+ktor:
+  deployment:
+    port: 28852
+  application:
+    modules:
+      - hotkitchen.ApplicationKt.module</code></pre></div></details>
+</div>

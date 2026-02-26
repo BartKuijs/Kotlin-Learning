@@ -1,0 +1,64 @@
+<div class="step-text">
+<h5 id="description">Description</h5><p>With a complete user registration, authentication, and profile system in place, it's time to build the core functionality of our HotKitchen application: the menu. This involves creating, managing, and displaying meals and their categories.</p><p>In this stage, you will introduce role-based access control. While any authenticated user can view the menu, only users with a <code class="language-json">staff</code> user type will have the permission to add new meals and categories. This is a common pattern in applications where certain actions are restricted to administrators or privileged users.</p><div class="alert alert-primary"><p>This project was recently updated. If you started before the updates and are facing issues, check the end of the <a href="https://hyperskill.org/projects/284/stages/1480/implement" rel="noopener noreferrer nofollow" target="_blank">Stage 1</a> description for notes on the update.</p></div><h5 id="objectives">Objectives</h5><p>Your goal is to define the data structures for meals and categories and implement API endpoints to manage them, enforcing the new access rules.</p><ul><li><p><strong>Create Data Models:</strong></p><ul><li><p>Define a <code class="language-json">Meal</code> data class to store meal information.</p></li><li><p>Define a <code class="language-json">Category</code> data class to store category information.</p></li></ul></li><li><p><strong>Implement API Endpoints:</strong></p><ul><li><p><code class="language-json">POST /meals</code> and <code class="language-json">POST /categories</code>: Restricted endpoints for <code class="language-json">staff</code> users to add new items.</p></li><li><p><code class="language-json">GET /meals</code> and <code class="language-json">GET /categories</code>: Publicly accessible endpoints for any authenticated user to view menu items. These will support fetching all items or a single item by its ID.</p></li></ul></li></ul><h5 id="data-models">Data Models</h5><p>You will need to create the following data structures, which will be used for both database storage and API responses.</p><p><strong>Meal</strong></p><ul><li><p><code class="language-json">mealId</code> (integer) - The unique identifier for the meal.</p></li><li><p><code class="language-json">title</code> (string) - The name of the meal.</p></li><li><p><code class="language-json">price</code> (float) - The price of the meal.</p></li><li><p><code class="language-json">imageUrl</code> (string) - A URL to an image of the meal.</p></li><li><p><code class="language-json">categoryIds</code> (list of integers) - A list of category IDs this meal belongs to.</p></li></ul><p><strong>Category</strong></p><ul><li><p><code class="language-json">categoryId</code> (integer) - The unique identifier for the category.</p></li><li><p><code class="language-json">title</code> (string) - The name of the category.</p></li><li><p><code class="language-json">description</code> (string) - A detailed description of the category.</p></li></ul><h5 id="api-endpoint-specifications">API Endpoint Specifications</h5><div class="alert alert-primary"><p>All endpoints below require a valid Bearer token for authentication.</p></div><p><code class="language-json">POST /meals</code><strong>:</strong></p><p>Adds a new meal to the database.</p><ul><li><p><strong>Access Control:</strong> <code class="language-json">staff</code> users only.</p></li><li><p><strong>Successful Response (</strong><code class="language-json">200 OK</code><strong>):</strong> Returns the newly created meal object.</p></li><li><p><strong>Failure (Access Denied) (</strong><code class="language-json">403 Forbidden</code><strong>):</strong> Occurs if a non-staff user attempts this action.</p><pre><code class="language-json">{
+    "status": "Access denied"
+}</code></pre></li><li><p><strong>Failure (</strong><code class="language-json">400 Bad Request</code><strong>):</strong> Occurs if addition failed.</p></li></ul><p><code class="language-json">POST /categories</code><strong>:</strong></p><p>Adds a new category to the database.</p><ul><li><p><strong>Access Control:</strong> <code class="language-json">staff</code> users only.</p></li><li><p><strong>Successful Response (</strong><code class="language-json">200 OK</code><strong>):</strong> Returns the newly created category object.</p></li><li><p><strong>Failure (Access Denied) (</strong><code class="language-json">403 Forbidden</code><strong>):</strong> Occurs if a non-staff user attempts this action.</p><pre><code class="language-json">{
+    "status": "Access denied"
+}</code></pre></li><li><p><strong>Failure (</strong><code class="language-json">400 Bad Request</code><strong>):</strong> Occurs if addition failed.</p></li></ul><p><code class="language-json">GET /meals</code><strong>:</strong></p><p>Retrieves a list of all meals.</p><ul><li><p><strong>Access Control:</strong> All authenticated users.</p></li><li><p><strong>Successful Response (</strong><code class="language-json">200 OK</code><strong>):</strong> Returns a JSON array of all meal objects.</p></li></ul><p><code class="language-json">GET /meals?id={id}</code><strong>:</strong></p><p>Retrieves a single meal by its unique ID.</p><ul><li><p><strong>Access Control:</strong> All authenticated users.</p></li><li><p><strong>Successful Response (</strong><code class="language-json">200 OK</code><strong>):</strong> Returns the JSON object for the requested meal.</p></li><li><p><strong>Failure (Not Found) (</strong><code class="language-json">400 Bad Request</code><strong>):</strong> Occurs if no meal with the specified ID exists.</p></li></ul><p><code class="language-json">GET /categories</code><strong>:</strong></p><p>Retrieves a list of all categories.</p><ul><li><p><strong>Access Control:</strong> All authenticated users.</p></li><li><p><strong>Successful Response (</strong><code class="language-json">200 OK</code><strong>):</strong> Returns a JSON array of all category objects.</p></li></ul><p><code class="language-json">GET /categories?id={id}</code><strong>:</strong></p><p>Retrieves a single category by its unique ID.</p><ul><li><p><strong>Access Control:</strong> All authenticated users.</p></li><li><p><strong>Successful Response (</strong><code class="language-json">200 OK</code><strong>):</strong> Returns the JSON object for the requested category.</p></li><li><p><strong>Failure (Not Found) (</strong><code class="language-json">400 Bad Request</code><strong>):</strong> Occurs if no category with the specified ID exists.</p></li></ul><h5 id="examples">Examples</h5><p><strong>Example 1:</strong></p><p><code class="language-json">GET</code> request for <code class="language-json">/meals</code> (without a token):</p><p><strong>Response (</strong><code class="language-json">401 Unauthorized</code><strong>)</strong></p><p><strong>Example 2 (as a 'staff' user with a valid token):</strong></p><ol><li><p><code class="language-json">GET</code> request for <code class="language-json">/meals</code> for the first time:</p><p><strong>Response (</strong><code class="language-json">200 OK</code><strong>):</strong></p><pre><code class="language-json">[]</code></pre></li><li><p>First <code class="language-json">POST</code> request for <code class="language-json">/meals</code>:</p><p><strong>Request body:</strong></p><pre><code class="language-json">{
+    "mealId": 0,
+    "title": "Soup",
+    "price": 25.8,
+    "imageUrl": "https://www.inspiredtaste.net/wp-content/uploads/2018/09/Easy-Chicken-Noodle-Soup-Recipe-1200jpg",
+    "categoryIds": [1,5]
+}</code></pre><p><strong>Response (</strong><code class="language-json">200 OK</code><strong>):</strong></p><pre><code class="language-json">{
+    "mealId": 0,
+    "title": "Soup",
+    "price": 25.8,
+    "imageUrl": "https://www.inspiredtaste.net/wp-content/uploads/2018/09/Easy-Chicken-Noodle-Soup-Recipe-1200jpg",
+    "categoryIds": [1,5]
+}</code></pre></li><li><p>One more <code class="language-json">POST</code> request for <code class="language-json">/meals</code> with a duplicate ID:</p><p><strong>Request body:</strong></p><pre><code class="language-json">{
+    "mealId": 0,
+    "title": "Soup",
+    "price": 25.8,
+    "imageUrl": "https://www.inspiredtaste.net/wp-content/uploads/2018/09/Easy-Chicken-Noodle-Soup-Recipe-1200jpg",
+    "categoryIds": [1,5]
+}</code></pre><p><strong>Response (</strong><code class="language-json">400 Bad Request</code><strong>)</strong></p></li><li><p><code class="language-json">GET</code> request for <code class="language-json">/meals</code> after adding one more meal:</p><p><strong>Response (</strong><code class="language-json">200 OK</code><strong>):</strong></p><pre><code class="language-json">[
+    {
+        "mealId": 0,
+        "title": "Soup",
+        "price": 25.8,
+        "imageUrl": "https://www.inspiredtaste.net/wp-content/uploads/2018/09/Easy-Chicken-Noodle-Soup-Recipe-1200jpg",
+        "categoryIds": [
+            1,
+            5
+        ]
+    },
+    {
+        "mealId": 1,
+        "title": "Pies",
+        "price": 17.3,
+        "imageUrl": "https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/best-pie-recipes-1635795947.jpeg",
+        "categoryIds": [
+            3,
+            6,
+            7
+        ]
+    }
+]</code></pre></li><li><p><code class="language-json">GET</code> request for <code class="language-json">/meals?id=0</code>:</p><p><strong>Response (</strong><code class="language-json">200 OK</code><strong>):</strong></p><pre><code class="language-json">{
+    "mealId": 0,
+    "title": "Soup",
+    "price": 25.8,
+    "imageUrl": "https://www.inspiredtaste.net/wp-content/uploads/2018/09/Easy-Chicken-Noodle-Soup-Recipe-1200jpg",
+    "categoryIds": [
+        1,
+        5
+    ]
+}</code></pre></li><li><p><code class="language-json">GET</code> request for <code class="language-json">/meals?id=12</code> where meal with ID <code class="language-json">12</code> wasn't added:</p><p><strong>Response (</strong><code class="language-json">400 Bad Request</code><strong>)</strong></p></li></ol><p><strong>Example 3 (as a 'staff' user with a valid token):</strong></p><p><code class="language-json">POST</code> request for <code class="language-json">/categories</code> using the token as staff:</p><p><strong>Request body:</strong></p><pre><code class="language-json">{
+    "categoryId": 0,
+    "title": "Hot drinks",
+    "description": "Drinks are liquids specifically prepared for human consumption."
+}</code></pre><p><strong>Response (</strong><code class="language-json">200 OK</code><strong>):</strong></p><pre><code class="language-json">{
+    "categoryId": 0,
+    "title": "Hot drinks",
+    "description": "Drinks are liquids specifically prepared for human consumption."
+}</code></pre>
+</div>

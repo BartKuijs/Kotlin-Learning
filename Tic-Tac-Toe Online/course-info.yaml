@@ -1,0 +1,16 @@
+type: hyperskill
+title: Tic-Tac-Toe Online
+language: English
+summary: "<p>Let's play a classic game of tic-tac-toe! But why stop there? Join us\
+  \ in creating the ultimate multiplayer version where you can host or join waiting\
+  \ rooms, customize the map size, and play against other users. We'll focus on developing\
+  \ the game's backend, and you'll have the opportunity to create the client portion\
+  \ to interact with the game server. Let's get started!</p>"
+programming_language: Kotlin
+content:
+  - Tic-Tac-Toe Online
+additional_files:
+  - name: build.gradle
+  - name: settings.gradle
+mode: Study
+yaml_version: 4

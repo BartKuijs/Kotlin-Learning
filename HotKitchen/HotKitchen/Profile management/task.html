@@ -1,0 +1,57 @@
+<div class="step-text">
+<h5 id="description">Description</h5><p>You have successfully implemented a robust token-based authentication system. A user can now register and sign in to receive a JWT, proving their identity. The next step is to build a full-fledged user profile where they can store and manage personal information like their name, phone number, and address.</p><p>This is where we'll introduce an important concept: the separation of <strong>authentication data</strong> (credentials like email and password hash) from <strong>profile data</strong> (personal information). When a user signs up, only their authentication data is created. Their detailed profile is initially empty and can be created or updated later.</p><p>In this stage, you will implement the logic for creating, viewing, updating, and deleting a user's profile. All these actions will be protected and will operate on the account associated with the provided JWT.</p><div class="alert alert-primary"><p>This project was recently updated. If you started before the updates and are facing issues, check the end of the <a href="https://hyperskill.org/projects/284/stages/1480/implement" rel="noopener noreferrer nofollow" target="_blank">Stage 1</a> description for notes on the update.</p></div><h5 id="objectives">Objectives</h5><p>Your goal is to create a user profile system by implementing three new API endpoints. All endpoints must be protected and require a valid Bearer token for authorization.</p><ul><li><p><code class="language-json">GET /me</code><strong>:</strong> Fetches the complete profile information for the authenticated user.</p></li><li><p><code class="language-json">PUT /me</code><strong>:</strong> Creates or updates the user's profile information.</p></li><li><p><code class="language-json">DELETE /me</code><strong>:</strong> Deletes the user's entire account, including both their profile and their credentials.</p></li></ul><h5 id="api-endpoint-specifications">API Endpoint Specifications</h5><p><code class="language-json">GET /me</code><strong>:</strong></p><p>Fetches the detailed profile information for the currently authenticated user.</p><ul><li><p><strong>Successful Response (</strong><code class="language-json">200 OK</code><strong>):</strong> Returns the user's profile data.</p><pre><code class="language-json">{
+    "name": "Goose",
+    "userType": "client",
+    "phone": "+79999999999",
+    "email": "example@gmail.com",
+    "address": "address"
+}</code></pre></li><li><p><strong>Failure Response (</strong><code class="language-json">400 Bad Request</code><strong>):</strong> This occurs if the user is authenticated but has not created their profile information yet.</p></li></ul><p><code class="language-json">PUT /me</code><strong>:</strong></p><p>Creates or updates the profile information for the authenticated user. This method performs an "upsert" operation: if the profile doesn't exist, it's created; if it already exists, it's updated with the new data.</p><ul><li><p><strong>Request Body:</strong> A JSON object with the user's full profile.</p></li><li><p><strong>Important Constraint:</strong> The <code class="language-json">email</code> field in the request body <strong>must</strong> match the email associated with the JWT. You should not change the email.</p></li><li><p><strong>Successful Response (</strong><code class="language-json">200 OK</code><strong>):</strong> Returns the newly created or updated profile data.</p><pre><code class="language-json">{
+    "name":"newName",
+    "userType":"newType",
+    "phone":"+79999999999",
+    "email":"example@gmail.com",
+    "address":"newAddress"
+}</code></pre></li><li><p><strong>Failure Response (</strong><code class="language-json">400 Bad Request</code><strong>):</strong> This occurs if the email in the request body does not match the email in the authentication token.</p></li></ul><p><code class="language-json">DELETE /me</code><strong>:</strong></p><p>Permanently deletes the authenticated user's account. This action is irreversible and removes all information associated with the user, including both their profile and their authentication credentials.</p><ul><li><p><strong>Successful Response (</strong><code class="language-json">200 OK</code><strong>):</strong> Indicates that the user account was successfully deleted. No response body is required.</p></li><li><p><strong>Failure Response (</strong><code class="language-json">404 Not Found</code><strong>):</strong> This occurs if the user account does not exist (for example, if you try to delete the same user twice).</p></li></ul><h5 id="examples">Examples</h5><p><strong>Example 1:</strong></p><p><code class="language-json">GET</code> request for <code class="language-json">/me</code> without a token:</p><p><strong>Response (</strong><code class="language-json">401 Unauthorized</code><strong>)</strong></p><div class="alert alert-primary"><p>All subsequent requests assume a valid JWT is provided for a user with the email <code class="language-json">example@gmail.com</code>.</p></div><p><strong>Example 2:</strong></p><p><code class="language-json">GET</code> request for <code class="language-json">/me</code> for a profile that doesn't exist yet:</p><p><strong>Response (</strong><code class="language-json">400 Bad Request</code><strong>)</strong></p><p><strong>Example 3:</strong></p><ol><li><p><code class="language-json">PUT</code> request for <code class="language-json">/me</code> to create the profile for the first time:</p><p><strong>Request body:</strong></p><pre><code class="language-json">{
+    "name":"Goose",
+    "userType":"client",
+    "phone":"+79999999999",
+    "email":"example@gmail.com",
+    "address":"address"
+}</code></pre><p><strong>Response (</strong><code class="language-json">200 OK</code><strong>):</strong></p><pre><code class="language-json">{
+    "name":"Goose",
+    "userType":"client",
+    "phone":"+79999999999",
+    "email":"example@gmail.com",
+    "address":"address"
+}</code></pre></li><li><p><code class="language-json">GET</code> request for <code class="language-json">/me</code> to view the newly created profile:</p><p><strong>Response (</strong><code class="language-json">200 OK</code><strong>):</strong></p><pre><code class="language-json">{
+    "name":"Goose",
+    "userType":"client",
+    "phone":"+79999999999",
+    "email":"example@gmail.com",
+    "address":"address"
+}</code></pre></li><li><p><code class="language-json">PUT</code> request for <code class="language-json">/me</code><em> </em>to update user information (with matching emails):</p><p><strong>Request body:</strong></p><pre><code class="language-json">{
+    "name":"newName",
+    "userType":"newType",
+    "phone":"+79999999999",
+    "email":"example@gmail.com",
+    "address":"newAddress"
+}</code></pre><p><strong>Response (</strong><code class="language-json">200 OK</code><strong>):</strong></p><pre><code class="language-json">{
+    "name":"newName",
+    "userType":"newType",
+    "phone":"+79999999999",
+    "email":"example@gmail.com",
+    "address":"newAddress"
+}</code></pre></li><li><p><code class="language-json">GET</code> request for <code class="language-json">/me</code> to view the updated profile:</p><p><strong>Response (</strong><code class="language-json">200 OK</code><strong>):</strong></p><pre><code class="language-json">{
+    "name":"newName",
+    "userType":"newType",
+    "phone":"+79999999999",
+    "email":"example@gmail.com",
+    "address":"newAddress"
+}</code></pre></li><li><p><code class="language-json">PUT</code> request for <code class="language-json">/me</code> to update with a different email (will fail):</p><p><strong>Request body:</strong></p><pre><code class="language-json">{
+    "name":"newName",
+    "userType":"newType",
+    "phone":"+79999999999",
+    "email":"NEWEMAIL@gmail.com",
+    "address":"newAddress"
+}</code></pre><p><strong>Response (</strong><code class="language-json">400 Bad Request</code><strong>)</strong></p></li></ol><p><strong>Example 4:</strong></p><ol><li><p>First <code class="language-json">DELETE</code> request for <code class="language-json">/me</code>:</p><p><strong>Response (</strong><code class="language-json">200 OK</code><strong>)</strong></p></li><li><p>One more <code class="language-json">DELETE</code> request for <code class="language-json">/me</code>:</p><p><strong>Response (</strong><code class="language-json">404 Not Found</code><strong>)</strong></p></li></ol>
+</div>

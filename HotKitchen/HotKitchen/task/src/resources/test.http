@@ -1,0 +1,43 @@
+@email = 1761327096376@mail.com
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOiJ1c2VycyIsImlzcyI6Imh0dHA6Ly8wLjAuMC4wOjI4ODUyLyIsImV4cCI6MTc2MTQxMzg3MywidXNlckVtYWlsIjoiMTc2MTMyNzA5NjM3NkBtYWlsLmNvbSIsInVzZXJUeXBlIjoiY2xpZW50In0.bVJFddn7GiZK8ET0-XufA2YExuhkKdTgLEJSep7eYhE"
+
+###
+POST http://127.0.0.1:28852/signin
+Content-Type: application/json
+
+{
+  "email": "1761327096376@mail.com",
+  "password": "password1761327096376"
+}
+###
+
+###
+DELETE http://127.0.0.1:28852/me
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "email": "1761327096376@mail.com",
+  "password": "password1761327096376"
+}
+###
+
+###
+PUT http://127.0.0.1:28852/me
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+  "name":"Goose",
+  "userType":"client",
+  "phone":"+79999999999",
+  "email":"1761161382697@gmail",
+  "address":"address"
+}
+###
+
+###
+GET http://127.0.0.1:28852/me
+Content-Type: application/json
+Authorization: Bearer {{token}}
+###

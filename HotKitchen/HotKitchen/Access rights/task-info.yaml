@@ -1,0 +1,74 @@
+type: edu
+files:
+  - name: src/plugins/Routing.kt
+    visible: true
+    learner_created: false
+  - name: src/resources/application.yaml
+    visible: true
+    learner_created: false
+  - name: src/Application.kt
+    visible: true
+    learner_created: false
+  - name: build.gradle
+    visible: true
+    learner_created: false
+  - name: src/models/User.kt
+    visible: true
+    learner_created: false
+  - name: src/models/Login.kt
+    visible: true
+    learner_created: false
+  - name: src/resources/test.http
+    visible: true
+    learner_created: false
+  - name: src/service/JwtService.kt
+    visible: true
+    learner_created: false
+  - name: src/service/TokenService.kt
+    visible: true
+    learner_created: false
+  - name: src/models/TokenConfig.kt
+    visible: true
+    learner_created: false
+  - name: src/models/TokenClaim.kt
+    visible: true
+    learner_created: false
+  - name: src/models/TokenResponse.kt
+    visible: true
+    learner_created: false
+  - name: src/models/Profile.kt
+    visible: true
+    learner_created: false
+  - name: src/routes/UserRoutes.kt
+    visible: true
+    learner_created: false
+  - name: src/service/UserService.kt
+    visible: true
+    learner_created: false
+  - name: docker/docker-compose.yaml
+    visible: true
+    learner_created: false
+  - name: test/HotKitchenTest.kt
+    visible: true
+    learner_created: false
+  - name: test/internal/KtorTest.kt
+    visible: false
+    learner_created: false
+  - name: test/testdata/Category.kt
+    visible: false
+    learner_created: false
+  - name: test/testdata/Credentials.kt
+    visible: false
+    learner_created: false
+  - name: test/testdata/Meal.kt
+    visible: false
+    learner_created: false
+  - name: test/testdata/Status.kt
+    visible: false
+    learner_created: false
+  - name: test/testdata/Token.kt
+    visible: false
+    learner_created: false
+feedback_link: https://hyperskill.org/projects/284/stages/1483/implement#comment
+status: Solved
+record: 4
